@@ -1,9 +1,18 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/imagenes/background.png" type="Texture" id=1]
 [ext_resource path="res://assets/imagenes/player.png" type="Texture" id=2]
-[ext_resource path="res://entities/player/Player.gd" type="Script" id=3]
 [ext_resource path="res://assets/imagenes/floor.png" type="Texture" id=4]
+[ext_resource path="res://entities/player/PlayerKinematic.gd" type="Script" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 511.607, 119.042 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 32.9186, 32.8642 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 31.7279, 31.9116 )
 
 [node name="Main" type="Node"]
 
@@ -20,13 +29,43 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Player" type="Sprite" parent="."]
-position = Vector2( 504.919, 326.66 )
-texture = ExtResource( 2 )
-script = ExtResource( 3 )
-speed = 100.0
+[node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 2147483649
 
-[node name="Floor" type="Sprite" parent="."]
+[node name="Floor" type="Sprite" parent="Floor"]
+show_behind_parent = true
 position = Vector2( 511.58, 478.544 )
 scale = Vector2( 15.5299, 3.66001 )
 texture = ExtResource( 4 )
+
+[node name="Collisio" type="CollisionShape2D" parent="Floor"]
+position = Vector2( 512.259, 478.374 )
+shape = SubResource( 1 )
+
+[node name="Floor2" type="StaticBody2D" parent="."]
+position = Vector2( -11, -263.99 )
+collision_layer = 2147483649
+
+[node name="Floor2" type="Sprite" parent="Floor2"]
+show_behind_parent = true
+position = Vector2( 271.847, 458.754 )
+scale = Vector2( 4, 1 )
+texture = ExtResource( 4 )
+
+[node name="Collision2" type="CollisionShape2D" parent="Floor2"]
+show_behind_parent = true
+position = Vector2( 271.847, 458.754 )
+scale = Vector2( 4, 1 )
+shape = SubResource( 3 )
+
+[node name="PlayerKinematic" type="KinematicBody2D" parent="."]
+position = Vector2( -284.268, -66.3674 )
+script = ExtResource( 5 )
+
+[node name="Player" type="Sprite" parent="PlayerKinematic"]
+position = Vector2( 486.535, 120.907 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerKinematic"]
+position = Vector2( 486.697, 121.003 )
+shape = SubResource( 2 )
