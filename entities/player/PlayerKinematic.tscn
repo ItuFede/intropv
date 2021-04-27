@@ -1,0 +1,31 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://entities/player/PlayerKinematic.gd" type="Script" id=2]
+[ext_resource path="res://assets/textures/cannon.png" type="Texture" id=3]
+[ext_resource path="res://assets/imagenes/player.png" type="Texture" id=4]
+[ext_resource path="res://entities/player/PlayerProjectile.tscn" type="PackedScene" id=5]
+[ext_resource path="res://entities/player/Arm.gd" type="Script" id=6]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 31.7279, 31.9116 )
+
+[node name="PlayerKinematic" type="KinematicBody2D"]
+position = Vector2( 225.588, 90.4354 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Player" type="Sprite" parent="."]
+texture = ExtResource( 4 )
+
+[node name="Arm" type="Sprite" parent="Player"]
+texture = ExtResource( 3 )
+script = ExtResource( 6 )
+projectile_scene = ExtResource( 5 )
+
+[node name="FirePosition" type="Position2D" parent="Player/Arm"]
+position = Vector2( 15, 0 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
