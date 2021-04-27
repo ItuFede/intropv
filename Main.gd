@@ -19,4 +19,4 @@ func _ready():
 	
 func random_area():
 	var screen_size = get_viewport().size
-	return Vector2(rand_range(0, screen_size.x), rand_range(100, screen_size.y - 300))
+	return Vector2(rand_range(0, screen_size.x), rand_range(0, screen_size.y/2))
