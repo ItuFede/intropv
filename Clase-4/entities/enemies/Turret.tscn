@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/textures/turret.png" type="Texture" id=1]
+[ext_resource path="res://entities/enemies/Turret.gd" type="Script" id=2]
+[ext_resource path="res://entities/enemies/TurretProjectile.tscn" type="PackedScene" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 384.624
+
+[node name="Turret" type="Sprite"]
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+projectile_scene = ExtResource( 3 )
+
+[node name="FireTimer" type="Timer" parent="."]
+
+[node name="FirePosition" type="Position2D" parent="."]
+position = Vector2( 0, -30.0339 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource( 1 )
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

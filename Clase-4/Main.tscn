@@ -1,0 +1,79 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://entities/player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/textures/background.png" type="Texture" id=2]
+[ext_resource path="res://Main.gd" type="Script" id=3]
+[ext_resource path="res://entities/enemies/Turret.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/enemies/TurretsSpawner.gd" type="Script" id=5]
+[ext_resource path="res://entities/Floor.tscn" type="PackedScene" id=6]
+[ext_resource path="res://entities/Cubo.tscn" type="PackedScene" id=7]
+[ext_resource path="res://entities/Ball.tscn" type="PackedScene" id=8]
+[ext_resource path="res://entities/AnimatedSprite.tscn" type="PackedScene" id=9]
+
+[node name="Main" type="Node"]
+script = ExtResource( 3 )
+
+[node name="Background" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 2 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 379.003, 278.272 )
+
+[node name="Floor" parent="." instance=ExtResource( 6 )]
+position = Vector2( 561.68, 546.939 )
+scale = Vector2( 2, 2.621 )
+
+[node name="Floor2" parent="." instance=ExtResource( 6 )]
+position = Vector2( 1555.75, 863.622 )
+scale = Vector2( 1, 2.621 )
+
+[node name="Floor3" parent="." instance=ExtResource( 6 )]
+position = Vector2( 813.593, 936.642 )
+scale = Vector2( 1, 2.621 )
+
+[node name="TurretsSpawner" type="Node" parent="."]
+script = ExtResource( 5 )
+turret_scene = ExtResource( 4 )
+
+[node name="RigidBody2D" parent="." instance=ExtResource( 7 )]
+position = Vector2( 588, 212 )
+
+[node name="RigidBody2D2" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1061.87, 348.154 )
+
+[node name="RigidBody2D3" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1040.51, 421.57 )
+
+[node name="RigidBody2D4" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1155.31, 350.823 )
+
+[node name="RigidBody2D5" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1111.26, 421.57 )
+
+[node name="RigidBody2D6" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1180.67, 421.57 )
+
+[node name="RigidBody2D7" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1257.22, 736.55 )
+
+[node name="RigidBody2D8" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1259.93, 594.179 )
+
+[node name="RigidBody2D9" parent="." instance=ExtResource( 7 )]
+position = Vector2( 1260.04, 665.994 )
+
+[node name="Ball" parent="." instance=ExtResource( 8 )]
+position = Vector2( 1109.25, 285.656 )
+
+[node name="AnimatedSprite" parent="." instance=ExtResource( 9 )]
+position = Vector2( 797.345, 767.675 )
+scale = Vector2( 0.2, 0.2 )
+frame = 26
+speed_scale = 5.0
+playing = true

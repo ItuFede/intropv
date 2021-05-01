@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://entities/Projectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/textures/proyectile_turret.png" type="Texture" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 8.86474
+
+[node name="TurretProjectile" instance=ExtResource( 1 )]
+VELOCITY = 400.0
+
+[node name="LifetimeTimer" parent="." index="0"]
+wait_time = 3.0
+
+[node name="CollisionShape2D" parent="." index="1"]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="." index="2"]
+texture = ExtResource( 2 )
