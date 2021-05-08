@@ -1,0 +1,41 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://entities/Projectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/textures/enemies/hairball 1.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/enemies/hairball 3.png" type="Texture" id=3]
+[ext_resource path="res://assets/textures/enemies/hairball 6.png" type="Texture" id=4]
+[ext_resource path="res://assets/textures/enemies/hairball 2.png" type="Texture" id=5]
+[ext_resource path="res://assets/textures/enemies/hairball 7.png" type="Texture" id=6]
+[ext_resource path="res://assets/textures/enemies/hairball 5.png" type="Texture" id=7]
+[ext_resource path="res://assets/textures/enemies/hairball 4.png" type="Texture" id=8]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 11.6304
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 2 ), ExtResource( 5 ), ExtResource( 3 ), ExtResource( 8 ), ExtResource( 7 ), ExtResource( 4 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 23.0
+} ]
+
+[node name="TurretProjectile" instance=ExtResource( 1 )]
+position = Vector2( 0.125, 0 )
+texture = null
+VELOCITY = 400.0
+
+[node name="LifetimeTimer" parent="." index="0"]
+wait_time = 3.0
+
+[node name="Hitbox" parent="." index="1"]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" index="0"]
+position = Vector2( 0.176777, -0.0883884 )
+shape = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="." index="2"]
+frames = SubResource( 2 )
+frame = 1
+playing = true
