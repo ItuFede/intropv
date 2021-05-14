@@ -7,7 +7,7 @@
 [ext_resource path="res://entities/player/PlayerProjectile.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/textures/player/raygunPurpleBig.png" type="Texture" id=6]
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=1]
 resource_name = "dead"
 length = 1.5
 step = 0.05
@@ -24,7 +24,7 @@ tracks/0/keys = {
 "values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 22, 23, 24, 25, 26, 27, 28, 29 ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=2]
 resource_name = "idle"
 length = 0.9
 loop = true
@@ -42,8 +42,8 @@ tracks/0/keys = {
 "values": [ 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 41, 41, 42, 43, 44 ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "wal"
+[sub_resource type="Animation" id=3]
+resource_name = "jump"
 length = 1.5
 step = 0.17
 tracks/0/type = "value"
@@ -59,7 +59,7 @@ tracks/0/keys = {
 "values": [ 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74 ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=4]
 resource_name = "walk"
 length = 2.1
 step = 0.05
@@ -76,12 +76,12 @@ tracks/0/keys = {
 "values": [ 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115 ]
 }
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=5]
 flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 6749.76, 2978.98 )
 
-[sub_resource type="RectangleShape2D" id=1]
+[sub_resource type="RectangleShape2D" id=6]
 extents = Vector2( 32, 81.4257 )
 
 [node name="Player" type="KinematicBody2D"]
@@ -90,19 +90,18 @@ collision_mask = 3
 script = ExtResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/dead = SubResource( 3 )
-anims/idle = SubResource( 4 )
-anims/wal = SubResource( 5 )
-anims/walk = SubResource( 6 )
+anims/dead = SubResource( 1 )
+anims/idle = SubResource( 2 )
+anims/jump = SubResource( 3 )
+anims/walk = SubResource( 4 )
 
 [node name="Body" type="Sprite" parent="."]
 position = Vector2( -0.0635071, 0.165405 )
 scale = Vector2( 0.5, 0.5 )
-texture = SubResource( 2 )
+texture = SubResource( 5 )
 offset = Vector2( 50, 0 )
 vframes = 8
 hframes = 15
-frame = 45
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 2.79111, -59.6531 )
@@ -123,4 +122,4 @@ position = Vector2( 15, 0 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 1, 0 )
-shape = SubResource( 1 )
+shape = SubResource( 6 )

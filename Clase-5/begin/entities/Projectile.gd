@@ -2,7 +2,6 @@ extends Sprite
 
 onready var lifetime_timer = $LifetimeTimer
 onready var hitbox = $Hitbox
-onready var fire_animation = $AnimationFire
 
 export (float) var VELOCITY:float = 800.0
 
@@ -16,9 +15,6 @@ func initialize(container, spawn_position:Vector2, direction:Vector2):
 	lifetime_timer.connect("timeout", self, "_on_lifetime_timer_timeout")
 	lifetime_timer.start()
 
-func _play_animation(animation_name:String):
-	if fire_animation.has_animation(animation_name):
-		fire_animation.play(animation_name)
 
 func _physics_process(delta):
 	position += direction * VELOCITY * delta

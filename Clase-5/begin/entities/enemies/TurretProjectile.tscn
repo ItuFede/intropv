@@ -22,7 +22,6 @@ animations = [ {
 
 [node name="TurretProjectile" instance=ExtResource( 1 )]
 position = Vector2( 0.125, 0 )
-texture = null
 VELOCITY = 400.0
 
 [node name="LifetimeTimer" parent="." index="0"]
@@ -37,5 +36,5 @@ shape = SubResource( 1 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="." index="2"]
 frames = SubResource( 2 )
-frame = 1
+frame = 5
 playing = true
