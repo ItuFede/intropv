@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://assets/textures/enemies/hairball.png" type="Texture" id=1]
+[ext_resource path="res://entities/Projectile.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/enemies/CatProjectile.gd" type="Script" id=3]
+
+[sub_resource type="Animation" id=1]
+resource_name = "rotate"
+length = 0.2
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 360.0 ]
+}
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 13.1774
+
+[node name="CatProjectile" instance=ExtResource( 2 )]
+script = ExtResource( 3 )
+
+[node name="RotationAnimation" type="AnimationPlayer" parent="." index="0"]
+anims/rotate = SubResource( 1 )
+
+[node name="LifetimeTimer" parent="." index="1"]
+wait_time = 3.0
+
+[node name="Sprite" parent="." index="2"]
+texture = ExtResource( 1 )
+
+[node name="Hitbox" parent="." index="3"]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" index="0"]
+shape = SubResource( 2 )
