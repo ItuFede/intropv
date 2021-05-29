@@ -1,0 +1,13 @@
+[gd_resource type="Theme" load_steps=2 format=2]
+
+[ext_resource path="res://theme/font_label.tres" type="DynamicFont" id=1]
+
+[resource]
+default_font = ExtResource( 1 )
+HSlider/icons/grabber = null
+HSlider/icons/grabber_disabled = null
+HSlider/icons/grabber_highlight = null
+HSlider/icons/tick = null
+HSlider/styles/grabber_area = null
+HSlider/styles/grabber_area_highlight = null
+HSlider/styles/slider = null

@@ -1,0 +1,224 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://chapters/funciones/smoothstep.shader" type="Shader" id=1]
+[ext_resource path="res://assets/white_square_64x64.png" type="Texture" id=2]
+[ext_resource path="res://chapters/funciones/Smoothstep.gd" type="Script" id=3]
+[ext_resource path="res://theme/theme_font/demo_theme.tres" type="Theme" id=4]
+[ext_resource path="res://chapters/funciones/Clamp.gd" type="Script" id=5]
+[ext_resource path="res://chapters/funciones/mix.shader" type="Shader" id=6]
+[ext_resource path="res://chapters/funciones/clamp.shader" type="Shader" id=7]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/step_start = 0.5
+shader_param/step_size = 0.2
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 7 )
+shader_param/clamp_max = 0.5
+shader_param/clamp_min = 0.2
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = ExtResource( 6 )
+shader_param/colorA = Color( 0.968627, 0.380392, 0.380392, 1 )
+shader_param/colorB = Color( 0, 0.623529, 1, 1 )
+
+[sub_resource type="Shader" id=14]
+code = "shader_type canvas_item;
+
+uniform float sections = 8.0;
+
+void fragment() {
+	float grayscale = fract(UV.x * sections);
+	vec3 albedo = vec3(grayscale);
+	COLOR = vec4(albedo, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=15]
+shader = SubResource( 14 )
+shader_param/sections = 8.0
+
+[sub_resource type="Shader" id=13]
+code = "shader_type canvas_item;
+
+uniform float sections = 8.0;
+uniform float width = 0.2;
+
+void fragment() {
+	float grayscale = floor(fract(UV.x * sections) + width);
+	vec3 albedo = vec3(grayscale);
+	COLOR = vec4(albedo, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=12]
+shader = SubResource( 13 )
+shader_param/sections = 8.0
+shader_param/width = 0.232
+
+[sub_resource type="Shader" id=7]
+code = "shader_type canvas_item;
+
+uniform vec4 colorA: hint_color;
+uniform vec4 colorB: hint_color;
+
+void fragment() {
+	float s = sin(UV.x * 20.0 + TIME);
+	vec4 color = mix(colorA, colorB, s);
+	COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 7 )
+shader_param/colorA = Color( 0.968627, 0.380392, 0.380392, 1 )
+shader_param/colorB = Color( 0, 0.623529, 1, 1 )
+
+[sub_resource type="Shader" id=9]
+code = "shader_type canvas_item;
+
+uniform vec4 colorA: hint_color;
+uniform vec4 colorB: hint_color;
+
+void fragment() {
+	float s = sin(UV.x * 20.0 + TIME) * 0.4;
+	float limit = smoothstep(0.5, 0.51, UV.y + s);
+	vec3 albedo = mix(colorA.rgb, colorB.rgb, limit);
+	COLOR = vec4(albedo, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=10]
+shader = SubResource( 9 )
+shader_param/colorA = Color( 0.968627, 0.380392, 0.380392, 1 )
+shader_param/colorB = Color( 0, 0.623529, 1, 1 )
+
+[node name="Funciones" type="Node2D"]
+
+[node name="Smoothstep" type="Node2D" parent="."]
+position = Vector2( 0, -64 )
+script = ExtResource( 3 )
+
+[node name="white_square_64x64" type="Sprite" parent="Smoothstep"]
+material = SubResource( 2 )
+position = Vector2( 512, 160 )
+scale = Vector2( 14, 1 )
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="Smoothstep"]
+margin_left = 64.0
+margin_top = 88.0
+margin_right = 227.0
+margin_bottom = 123.0
+theme = ExtResource( 4 )
+text = "Smoothstep"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Clamp" type="Node2D" parent="."]
+position = Vector2( 0, 128 )
+script = ExtResource( 5 )
+
+[node name="white_square_64x64" type="Sprite" parent="Clamp"]
+material = SubResource( 4 )
+position = Vector2( 512, 160 )
+scale = Vector2( 14, 1 )
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="Clamp"]
+margin_left = 64.0
+margin_top = 88.0
+margin_right = 227.0
+margin_bottom = 123.0
+theme = ExtResource( 4 )
+text = "Clamp"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Mix" type="Node2D" parent="."]
+position = Vector2( 0, 320 )
+script = ExtResource( 5 )
+
+[node name="white_square_64x64" type="Sprite" parent="Mix"]
+material = SubResource( 6 )
+position = Vector2( 512, 160 )
+scale = Vector2( 14, 1 )
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="Mix"]
+margin_left = 64.0
+margin_top = 88.0
+margin_right = 227.0
+margin_bottom = 123.0
+theme = ExtResource( 4 )
+text = "Mix"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Fract" type="Node2D" parent="."]
+position = Vector2( 0, 520 )
+script = ExtResource( 5 )
+
+[node name="white_square_64x64" type="Sprite" parent="Fract"]
+material = SubResource( 15 )
+position = Vector2( 512, 188 )
+scale = Vector2( 14, 1.875 )
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="Fract"]
+margin_left = 64.0
+margin_top = 88.0
+margin_right = 227.0
+margin_bottom = 123.0
+theme = ExtResource( 4 )
+text = "Fract"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Floor" type="Node2D" parent="."]
+position = Vector2( 0, 776 )
+script = ExtResource( 5 )
+
+[node name="white_square_64x64" type="Sprite" parent="Floor"]
+material = SubResource( 12 )
+position = Vector2( 512, 188 )
+scale = Vector2( 14, 1.875 )
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="Floor"]
+margin_left = 64.0
+margin_top = 88.0
+margin_right = 227.0
+margin_bottom = 123.0
+theme = ExtResource( 4 )
+text = "Floor"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sin" type="Node2D" parent="."]
+position = Vector2( 0, 1024 )
+
+[node name="white_square_64x64" type="Sprite" parent="Sin"]
+material = SubResource( 8 )
+position = Vector2( 512, 192 )
+scale = Vector2( 14, 2 )
+texture = ExtResource( 2 )
+
+[node name="white_square_64x65" type="Sprite" parent="Sin"]
+material = SubResource( 10 )
+position = Vector2( 512, 336 )
+scale = Vector2( 14, 2 )
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="Sin"]
+margin_left = 64.0
+margin_top = 88.0
+margin_right = 227.0
+margin_bottom = 123.0
+theme = ExtResource( 4 )
+text = "Sin"
+__meta__ = {
+"_edit_use_anchors_": false
+}

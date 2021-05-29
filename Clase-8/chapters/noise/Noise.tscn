@@ -1,0 +1,177 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://theme/theme_font/demo_theme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/white_square_64x64.png" type="Texture" id=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+// The MIT License
+// Copyright © 2013 Inigo Quilez
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+// Simplex Noise (http://en.wikipedia.org/wiki/Simplex_noise), a type of gradient noise
+// that uses N+1 vertices for random gradient interpolation instead of 2^N as in regular
+// latice based Gradient Noise.
+
+
+// Value    Noise 2D, Derivatives: https://www.shadertoy.com/view/4dXBRH
+// Gradient Noise 2D, Derivatives: https://www.shadertoy.com/view/XdXBRH
+// Value    Noise 3D, Derivatives: https://www.shadertoy.com/view/XsXfRH
+// Gradient Noise 3D, Derivatives: https://www.shadertoy.com/view/4dffRH
+// Value    Noise 2D             : https://www.shadertoy.com/view/lsf3WH
+// Value    Noise 3D             : https://www.shadertoy.com/view/4sfGzS
+// Gradient Noise 2D             : https://www.shadertoy.com/view/XdXGW8
+// Gradient Noise 3D             : https://www.shadertoy.com/view/Xsl3Dl
+// Simplex  Noise 2D             : https://www.shadertoy.com/view/Msf3WH
+// Wave     Noise 2D             : https://www.shadertoy.com/view/tldSRj
+
+
+vec2 hash( vec2 p ) // replace this by something better
+{
+	p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
+	return -1.0 + 2.0*fract(sin(p)*43758.5453123);
+}
+
+float noise( in vec2 p )
+{
+    const float K1 = 0.366025404; // (sqrt(3)-1)/2;
+    const float K2 = 0.211324865; // (3-sqrt(3))/6;
+
+	vec2  i = floor( p + (p.x+p.y)*K1 );
+    vec2  a = p - i + (i.x+i.y)*K2;
+    float m = step(a.y,a.x); 
+    vec2  o = vec2(m,1.0-m);
+    vec2  b = a - o + K2;
+	vec2  c = a - 1.0 + 2.0*K2;
+    vec3  h = max( 0.5-vec3(dot(a,a), dot(b,b), dot(c,c) ), 0.0 );
+	vec3  n = h*h*h*h*vec3( dot(a,hash(i+0.0)), dot(b,hash(i+o)), dot(c,hash(i+1.0)));
+    return dot( n, vec3(70.0) );
+}
+
+// -----------------------------------------------
+
+void fragment()
+{
+	vec2 uv = UV + TIME*0.25;
+	
+	float f = 0.0;
+	
+    // left: value noise	
+	
+	uv *= 5.0;
+    mat2 m = mat2( vec2(1.6,  1.2), vec2(-1.2,  1.6) );
+	f  = 0.5000*noise( uv ); uv = m*uv;
+	f += 0.2500*noise( uv ); uv = m*uv;
+	f += 0.1250*noise( uv ); uv = m*uv;
+	f += 0.0625*noise( uv ); uv = m*uv;
+	
+
+	f = 0.5 + 0.5*f;
+
+	COLOR = vec4( f, f, f, 1.0 );
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+
+[sub_resource type="Shader" id=3]
+code = "shader_type canvas_item;
+
+vec2 random(vec2 uv) {
+	return vec2(fract(sin(dot(uv.xy,
+		vec2(12.9898,78.233))) * 43758.5453123));
+}
+
+// https://thebookofshaders.com/edit.php#12/2d-voronoi.frag
+vec3 voronoi2( in vec2 uv, float columns, float rows) {
+	vec2 n = floor(vec2(uv.x * columns, uv.y * rows));
+	vec2 f = fract(vec2(uv.x * columns, uv.y * rows));
+
+    // first pass: regular voronoi
+    vec2 mg, mr;
+    float md = 1.0;
+	vec2 min_point;
+    for (int j= -1; j <= 1; j++) {
+        for (int i= -1; i <= 1; i++) {
+            vec2 g = vec2(float(i),float(j));
+            vec2 o = random( n + g );
+
+            vec2 r = g + o - f;
+            float d = dot(r,r);
+
+            if( d<md ) {
+                md = d;
+                mr = r;
+                mg = g;
+				min_point = o;
+            }
+        }
+    }
+
+    // second pass: distance to borders
+    md = 8.0;
+    for (int j= -2; j <= 2; j++) {
+        for (int i= -2; i <= 2; i++) {
+            vec2 g = mg + vec2(float(i),float(j));
+            vec2 o = random( n + g );
+
+            vec2 r = g + o - f;
+
+            if ( dot(mr-r,mr-r)>0.00001 ) {
+                md = min(md, dot( 0.5*(mr+r), normalize(r-mr) ));
+            }
+        }
+    }
+    return vec3(min_point, md);
+}
+
+void fragment() {
+	vec3 albedo = voronoi2(UV + TIME * 0.25, 5.0, 5.0);
+	COLOR = vec4(albedo.xxx, 1.0);
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+
+[node name="Noise" type="Node2D"]
+
+[node name="Simplex" type="Node2D" parent="."]
+
+[node name="SimplexNoise" type="Sprite" parent="Simplex"]
+material = SubResource( 2 )
+position = Vector2( 256, 256 )
+scale = Vector2( 6, 6 )
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="Simplex"]
+margin_left = 64.0
+margin_top = 24.0
+margin_right = 256.0
+margin_bottom = 59.0
+theme = ExtResource( 1 )
+text = "Simplex Noise"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VoronoiNoise" type="Node2D" parent="."]
+position = Vector2( 192, 0 )
+
+[node name="Voronoi" type="Sprite" parent="VoronoiNoise"]
+material = SubResource( 4 )
+position = Vector2( 576, 256 )
+scale = Vector2( 6, 6 )
+texture = ExtResource( 2 )
+
+[node name="Label2" type="Label" parent="VoronoiNoise"]
+margin_left = 384.0
+margin_top = 24.0
+margin_right = 576.0
+margin_bottom = 59.0
+theme = ExtResource( 1 )
+text = "Voronoi"
+__meta__ = {
+"_edit_use_anchors_": false
+}

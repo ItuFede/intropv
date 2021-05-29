@@ -1,0 +1,165 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://assets/loro_arcoiris.jpg" type="Texture" id=1]
+[ext_resource path="res://theme/theme_font/demo_theme.tres" type="Theme" id=2]
+[ext_resource path="res://assets/white_square_64x64.png" type="Texture" id=3]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform float brightness = 1.0;
+uniform float contrast = 1.0;
+uniform float saturation = 1.0;
+
+void fragment() {
+    vec3 c = texture(TEXTURE, UV, 0.0).rgb;
+
+    c.rgb = mix(vec3(0.0), c.rgb, brightness);
+    c.rgb = mix(vec3(0.5), c.rgb, contrast);
+    c.rgb = mix(vec3(dot(vec3(1.0), c.rgb) * 0.33333), c.rgb, saturation);
+
+    COLOR.rgb = c;
+}
+"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/brightness = 1.0
+shader_param/contrast = 1.0
+shader_param/saturation = 1.0
+
+[sub_resource type="Shader" id=3]
+code = "// The MIT License
+// Copyright © 2015 Inigo Quilez
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+
+// A simple way to create color variation in a cheap way (yes, trigonometrics ARE cheap
+// in the GPU, don't try to be smart and use a triangle wave instead).
+
+// See http://iquilezles.org/www/articles/palettes/palettes.htm for more information
+shader_type canvas_item;
+
+
+vec3 pal( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d )
+{
+    return a + b*cos( 6.28318*(c*t+d) );
+}
+
+void fragment()
+{
+	vec2 p = UV;
+    
+    // animate
+    p.x += 0.01*TIME;
+    
+    // compute colors
+    vec3                col = pal( p.x, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.33,0.67) );
+    if( p.y>(1.0/7.0) ) col = pal( p.x, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.0,0.10,0.20) );
+    if( p.y>(2.0/7.0) ) col = pal( p.x, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,1.0),vec3(0.3,0.20,0.20) );
+    if( p.y>(3.0/7.0) ) col = pal( p.x, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,1.0,0.5),vec3(0.8,0.90,0.30) );
+    if( p.y>(4.0/7.0) ) col = pal( p.x, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(1.0,0.7,0.4),vec3(0.0,0.15,0.20) );
+    if( p.y>(5.0/7.0) ) col = pal( p.x, vec3(0.5,0.5,0.5),vec3(0.5,0.5,0.5),vec3(2.0,1.0,0.0),vec3(0.5,0.20,0.25) );
+    if( p.y>(6.0/7.0) ) col = pal( p.x, vec3(0.8,0.5,0.4),vec3(0.2,0.4,0.2),vec3(2.0,1.0,1.0),vec3(0.0,0.25,0.25) );
+    
+
+    // band
+    float f = fract(p.y*7.0);
+    // borders
+    col *= smoothstep( 0.49, 0.47, abs(f-0.5) );
+    // shadowing
+    col *= 0.5 + 0.5*sqrt(4.0*f*(1.0-f));
+
+	COLOR = vec4( col, 1.0 );
+}"
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = SubResource( 3 )
+
+[sub_resource type="Shader" id=5]
+code = "// The MIT License
+// Copyright © 2014 Inigo Quilez
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+// Converting from HSV to RGB leads to C1 discontinuities, for the RGB components
+// are driven by picewise linear segments. Using a cubic smoother (smoothstep) makes 
+// the color transitions in RGB C1 continuous when linearly interpolating the hue H.
+
+// C2 continuity can be achieved as well by replacing smoothstep with a quintic
+// polynomial. Of course all these cubic, quintic and trigonometric variations break 
+// the standard (http://en.wikipedia.org/wiki/HSL_and_HSV), but they look better.
+
+
+// Official HSV to RGB conversion 
+
+shader_type canvas_item;
+
+vec3 hsv2rgb( in vec3 c )
+{
+    vec3 rgb = clamp( abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),6.0)-3.0)-1.0, 0.0, 1.0 );
+
+	return c.z * mix( vec3(1.0), rgb, c.y);
+}
+
+// Smooth HSV to RGB conversion 
+vec3 hsv2rgb_smooth( in vec3 c )
+{
+    vec3 rgb = clamp( abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),6.0)-3.0)-1.0, 0.0, 1.0 );
+
+	rgb = rgb*rgb*(3.0-2.0*rgb); // cubic smoothing	
+
+	return c.z * mix( vec3(1.0), rgb, c.y);
+}
+
+// compare
+void fragment()
+{
+	vec2 uv = UV;
+	
+	vec3 hsl = vec3( uv.x, 1.0, uv.y );
+
+	vec3 rgb_o = hsv2rgb( hsl );
+	vec3 rgb_s = hsv2rgb_smooth( hsl );
+	
+	vec3 rgb = mix( rgb_o, rgb_s, smoothstep( -0.2, 0.2, sin(2.0*TIME)) );
+	
+	COLOR = vec4( rgb, 1.0 );
+}"
+
+[sub_resource type="ShaderMaterial" id=6]
+shader = SubResource( 5 )
+
+[node name="Color" type="Node2D"]
+
+[node name="LoroArcoiris" type="Sprite" parent="."]
+material = SubResource( 2 )
+position = Vector2( 232, 192 )
+scale = Vector2( 0.391979, 0.391979 )
+texture = ExtResource( 1 )
+
+[node name="Label" type="Label" parent="."]
+margin_left = 61.0971
+margin_top = 24.0
+margin_right = 132.097
+margin_bottom = 59.0
+theme = ExtResource( 2 )
+text = "Color"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PaletaDeColores" type="Sprite" parent="."]
+material = SubResource( 4 )
+position = Vector2( 736, 192 )
+scale = Vector2( 7, 4 )
+texture = ExtResource( 3 )
+
+[node name="HSV" type="Sprite" parent="."]
+material = SubResource( 6 )
+position = Vector2( 192, 520 )
+scale = Vector2( 4.125, 4.125 )
+texture = ExtResource( 3 )
