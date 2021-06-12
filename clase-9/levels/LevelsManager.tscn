@@ -1,0 +1,193 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://levels/LevelsManager.gd" type="Script" id=1]
+[ext_resource path="res://assets/fonts/Menu.tres" type="DynamicFont" id=2]
+[ext_resource path="res://levels/Loading.gd" type="Script" id=3]
+[ext_resource path="res://levels/GameMenu.gd" type="Script" id=4]
+[ext_resource path="res://assets/fonts/Roboto-Regular.ttf" type="DynamicFontData" id=5]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.85098, 0.85098, 0.85098, 1 )
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color( 0.27451, 0.623529, 1, 1 )
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[sub_resource type="DynamicFont" id=2]
+size = 70
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 5 )
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[node name="Main" type="Node"]
+script = ExtResource( 1 )
+levels = [ "res://levels/Level01.tscn", "res://levels/Level02.tscn" ]
+
+[node name="Loading" type="CanvasLayer" parent="."]
+layer = 10
+script = ExtResource( 3 )
+
+[node name="Timer" type="Timer" parent="Loading"]
+wait_time = 0.5
+
+[node name="ColorRect" type="ColorRect" parent="Loading"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Loading/ColorRect"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -162.0
+margin_top = -33.0
+margin_right = 166.0
+margin_bottom = 27.0
+mouse_filter = 2
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Loading/ColorRect/HBoxContainer"]
+margin_left = 85.0
+margin_top = 9.0
+margin_right = 212.0
+margin_bottom = 51.0
+custom_fonts/font = ExtResource( 2 )
+text = "Loading"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="dots" type="Label" parent="Loading/ColorRect/HBoxContainer"]
+margin_left = 216.0
+margin_top = 9.0
+margin_right = 243.0
+margin_bottom = 51.0
+custom_fonts/font = ExtResource( 2 )
+text = "..."
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LevelsContainer" type="Node" parent="."]
+
+[node name="Menu" type="CanvasLayer" parent="."]
+pause_mode = 2
+script = ExtResource( 4 )
+
+[node name="InputTimer" type="Timer" parent="Menu"]
+wait_time = 0.5
+one_shot = true
+
+[node name="Control" type="Control" parent="Menu"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="Menu/Control"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -235.0
+margin_top = -235.0
+margin_right = 237.0
+margin_bottom = 237.0
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Menu/Control/Panel"]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -153.417
+margin_bottom = -70.4169
+custom_fonts/font = SubResource( 2 )
+text = "Game Paused"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu/Control/Panel"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -166.0
+margin_right = 166.0
+margin_bottom = 173.0
+custom_constants/separation = 20
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Continue" type="Button" parent="Menu/Control/Panel/VBoxContainer"]
+margin_right = 332.0
+margin_bottom = 42.0
+custom_styles/hover = SubResource( 3 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 3 )
+custom_styles/normal = SubResource( 3 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_hover = Color( 0.305882, 0.607843, 1, 1 )
+text = "Continue"
+
+[node name="Restart" type="Button" parent="Menu/Control/Panel/VBoxContainer"]
+margin_top = 62.0
+margin_right = 332.0
+margin_bottom = 104.0
+custom_styles/hover = SubResource( 3 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 3 )
+custom_styles/normal = SubResource( 3 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_hover = Color( 0.305882, 0.607843, 1, 1 )
+text = "Restart"
+
+[node name="Exit" type="Button" parent="Menu/Control/Panel/VBoxContainer"]
+margin_top = 124.0
+margin_right = 332.0
+margin_bottom = 166.0
+custom_styles/hover = SubResource( 3 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 3 )
+custom_styles/normal = SubResource( 3 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color_hover = Color( 0.305882, 0.607843, 1, 1 )
+text = "Exit"
+
+[connection signal="timeout" from="Loading/Timer" to="Loading" method="_on_Timer_timeout"]
+[connection signal="exit_requested" from="Menu" to="." method="exit_game"]
+[connection signal="restart_requested" from="Menu" to="." method="reset_level"]
+[connection signal="button_up" from="Menu/Control/Panel/VBoxContainer/Continue" to="Menu" method="_on_Continue_button_up"]
+[connection signal="button_up" from="Menu/Control/Panel/VBoxContainer/Restart" to="Menu" method="_on_Restart_button_up"]
+[connection signal="button_up" from="Menu/Control/Panel/VBoxContainer/Exit" to="Menu" method="_on_Exit_button_up"]

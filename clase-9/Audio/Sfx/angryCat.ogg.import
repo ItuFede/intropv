@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/angryCat.ogg-ca482388f1be487d18230560ee6a3a9c.oggstr"
+
+[deps]
+
+source_file="res://Audio/Sfx/angryCat.ogg"
+dest_files=[ "res://.import/angryCat.ogg-ca482388f1be487d18230560ee6a3a9c.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

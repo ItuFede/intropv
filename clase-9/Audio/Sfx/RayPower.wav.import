@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/RayPower.wav-fa774e2d0d3fdd9757412ccbb6704e4f.sample"
+
+[deps]
+
+source_file="res://Audio/Sfx/RayPower.wav"
+dest_files=[ "res://.import/RayPower.wav-fa774e2d0d3fdd9757412ccbb6704e4f.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=true
+compress/mode=0

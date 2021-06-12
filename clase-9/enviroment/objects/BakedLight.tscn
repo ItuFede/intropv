@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://enviroment/objects/BakedLight.gd" type="Script" id=1]
+
+[node name="BakedLight" type="Node2D"]
+position = Vector2( 1532.91, -880.958 )
+script = ExtResource( 1 )
+light_colour = Color( 1, 0.588235, 0.00784314, 0.533333 )
+light_size = 2000.0
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+enabled = true
+exclude_parent = false

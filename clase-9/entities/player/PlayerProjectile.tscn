@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://entities/Projectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/textures/player/cat_food.png" type="Texture" id=2]
+[ext_resource path="res://entities/player/PlayerProjectile.gd" type="Script" id=3]
+
+[sub_resource type="Animation" id=2]
+resource_name = "rotate"
+length = 0.5
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ 0.0, 360.0 ]
+}
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 23.2013
+
+[node name="PlayerProjectile" instance=ExtResource( 1 )]
+position = Vector2( -0.0782127, -0.00446609 )
+rotation = -1.58133
+scale = Vector2( 0.402377, 0.402377 )
+script = ExtResource( 3 )
+
+[node name="RotationAnimation" type="AnimationPlayer" parent="." index="0"]
+anims/rotate = SubResource( 2 )
+
+[node name="Sprite" parent="." index="2"]
+scale = Vector2( 0.962814, 0.962814 )
+texture = ExtResource( 2 )
+
+[node name="Hitbox" parent="." index="3"]
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" index="0"]
+position = Vector2( -1.28417, 3.23665 )
+shape = SubResource( 1 )

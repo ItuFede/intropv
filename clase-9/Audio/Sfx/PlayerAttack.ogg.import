@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/PlayerAttack.ogg-9901c7747372422fbb76025f8ddc2e83.oggstr"
+
+[deps]
+
+source_file="res://Audio/Sfx/PlayerAttack.ogg"
+dest_files=[ "res://.import/PlayerAttack.ogg-9901c7747372422fbb76025f8ddc2e83.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

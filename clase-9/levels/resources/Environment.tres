@@ -1,0 +1,18 @@
+[gd_resource type="Environment" format=2]
+
+[resource]
+background_mode = 4
+ssao_radius = 32.26
+ssao_intensity = 83.91
+ssao_radius2 = 76.8
+ssao_intensity2 = 73.53
+ssao_bias = 4.454
+glow_enabled = true
+glow_intensity = 1.66
+glow_strength = 0.64
+glow_bloom = 0.05
+glow_blend_mode = 0
+glow_hdr_threshold = 0.9
+glow_hdr_luminance_cap = 24.0
+glow_hdr_scale = 4.0
+glow_bicubic_upscale = true

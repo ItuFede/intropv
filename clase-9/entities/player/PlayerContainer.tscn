@@ -1,0 +1,87 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://shaders/ice.shader" type="Shader" id=1]
+[ext_resource path="res://assets/textures/ice.png" type="Texture" id=2]
+[ext_resource path="res://entities/player/Camera.gd" type="Script" id=3]
+[ext_resource path="res://entities/player/IceEffect.gd" type="Script" id=4]
+[ext_resource path="res://entities/player/IceMask.gd" type="Script" id=5]
+[ext_resource path="res://entities/player/Player.tscn" type="PackedScene" id=6]
+
+[sub_resource type="Animation" id=1]
+resource_name = "vibrate"
+length = 0.21
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.1, 0.15, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -10 ), Vector2( 0, 10 ), Vector2( -10, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:zoom")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.03, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1.03, 1.04 ), Vector2( 1.1, 1.1 ), Vector2( 1, 1 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("..")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray(  ),
+"transitions": PoolRealArray(  ),
+"values": [  ]
+}
+
+[sub_resource type="Gradient" id=2]
+colors = PoolColorArray( 0.85098, 0, 1, 0, 0, 1, 0.976562, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=4]
+shader = ExtResource( 1 )
+shader_param/contrast = 0.5
+shader_param/color_ramp = SubResource( 3 )
+
+[node name="PlayerContainer" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource( 6 )]
+gravity = 50
+
+[node name="Camera" type="Camera2D" parent="Player"]
+offset = Vector2( -10, 0 )
+current = true
+script = ExtResource( 3 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Player/Camera"]
+anims/vibrate = SubResource( 1 )
+
+[node name="IceEffect" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="IceMask" type="Node2D" parent="IceEffect"]
+material = SubResource( 4 )
+z_index = 1
+script = ExtResource( 5 )
+tex = ExtResource( 2 )
+
+[node name="Timer" type="Timer" parent="IceEffect/IceMask"]
+wait_time = 0.016
+[connection signal="ice" from="Player" to="IceEffect" method="_on_Player_ice"]
+[connection signal="ice_started" from="Player" to="Player/Camera" method="_on_Player_ice_started"]
+[connection signal="ice_stopped" from="Player" to="Player/Camera" method="_on_Player_ice_stopped"]
+[connection signal="timeout" from="IceEffect/IceMask/Timer" to="IceEffect/IceMask" method="_on_Timer_timeout"]
